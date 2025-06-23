@@ -25,16 +25,25 @@
       gap: 15px;
     }
 
-    .gallery img {
-      width: 200px;
-      height: auto;
-      border: 3px solid #00ffff;
+    .gallery .card {
+      background: #222;
+      border: 1px solid #00ffff44;
+      padding: 10px;
       border-radius: 10px;
-      transition: transform 0.3s ease;
+      width: 220px;
     }
 
-    .gallery img:hover {
-      transform: scale(1.1);
+    .gallery img {
+      width: 100%;
+      height: auto;
+      border-radius: 8px;
+    }
+
+    .filename {
+      font-size: 0.9em;
+      color: #ccc;
+      margin-top: 8px;
+      word-break: break-all;
     }
 
     .note {
@@ -46,34 +55,42 @@
 </head>
 <body>
   <h1>📸 Captured Photos</h1>
-  <div class="gallery">
-    <!-- JS will load images here -->
+  <div class="gallery" id="gallery">
+    <p>Loading images...</p>
   </div>
-  <p class="note">Images are automatically loaded from the logs folder.</p>
+  <p class="note">Images are loaded dynamically from <code>logs/</code> folder.</p>
 
   <script>
-    fetch("logs/")
-      .then(response => response.text())
-      .then(text => {
-        const parser = new DOMParser();
-        const htmlDoc = parser.parseFromString(text, "text/html");
-        const links = [...htmlDoc.querySelectorAll("a")];
+    fetch("list_images.php")
+      .then(res => res.json())
+      .then(images => {
+        const gallery = document.getElementById("gallery");
+        gallery.innerHTML = ""; // clear loading
 
-        const pngLinks = links
-          .map(link => link.getAttribute("href"))
-          .filter(href => href.endsWith(".png"));
+        if (images.length === 0) {
+          gallery.innerHTML = "<p style='color:gray;'>No images found yet.</p>";
+        }
 
-        const gallery = document.querySelector(".gallery");
+        images.forEach(file => {
+          const card = document.createElement("div");
+          card.className = "card";
 
-        pngLinks.forEach(file => {
           const img = document.createElement("img");
-          img.src = `logs/${file}`;
-          gallery.appendChild(img);
+          img.src = file;
+
+          const name = document.createElement("div");
+          name.className = "filename";
+          name.textContent = file;
+
+          card.appendChild(img);
+          card.appendChild(name);
+          gallery.appendChild(card);
         });
       })
       .catch(err => {
-        document.querySelector(".gallery").innerHTML = "<p style='color:red;'>Failed to load images.</p>";
-        console.error("Error loading logs folder:", err);
+        document.getElementById("gallery").innerHTML =
+          "<p style='color:red;'>Failed to load images.</p>";
+        console.error("Error loading images:", err);
       });
   </script>
 </body>
