@@ -67,7 +67,7 @@ pkg install php
 pkg install git
 ```
 ```
-git clone https://github.com/Safikhan415/CAM/LOC.git
+git clone https://github.com/Safikhan415/CAM-LOC.git
 ```
 ```
 cd CAM/LOC
