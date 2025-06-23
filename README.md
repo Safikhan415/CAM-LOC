@@ -1,4 +1,4 @@
-# CAM/LOC 🔍 (Previously Camhack)
+# CAM/LOC 🔍 (Previously CAM/LOC)
 
 **CAM/LOC** is an educational tool created to demonstrate how camera access phishing attacks work in real-world scenarios.  
 It is intended purely for **ethical hacking** and **cybersecurity awareness** purposes.
